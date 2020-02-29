@@ -1,5 +1,4 @@
 import re
-import sys
 
 import pandas as pd
 import numpy as np
@@ -9,6 +8,11 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import f1_score
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
+
+def warn(*args, **kwargs):
+    pass
+import warnings
+warnings.warn = warn
 
 
 def get_weight_func(func_name, param):
@@ -176,7 +180,7 @@ for func in ['epanechnikov', 'gaussian', 'tophat', 'exponential', 'linear', 'cos
 
 param_grid = {
     # 'n_neighbors': [3, 4, 5, 5, 6, 7, 8, 9, 10],
-    'n_neighbors': [4],
+    'n_neighbors': [16],
     'weights': weight_func_options,
     'metric': ['minkowski', 'euclidean', 'chebyshev'],
     'p': [1, 2, 3]
@@ -281,7 +285,7 @@ for window_size in np.linspace(0.1, 10, 9):
                                         weights=get_weight_func(kernel_family, window_size))
     f1_scores_windows.append(get_f1_loo_score(knn_regressor, x_final, y_final))
 
-for n_neighbors in range(1, 5):
+for n_neighbors in range(6, 20):
     neighbors_amounts.append(n_neighbors)
     knn_regressor = KNeighborsRegressor(metric=grid_search.best_params_['metric'],
                                         n_neighbors=n_neighbors,
